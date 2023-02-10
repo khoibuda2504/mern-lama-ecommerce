@@ -27,16 +27,19 @@ export const sliderItems = [
       id: 1,
       img: "https://images.pexels.com/photos/5886041/pexels-photo-5886041.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
       title: "SHIRT STYLE!",
+      cat:"women"
     },
     {
       id: 2,
       img: "https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
       title: "LOUNGEWEAR LOVE",
+      cat:"coat"
     },
     {
       id: 3,
       img: "https://images.pexels.com/photos/5480696/pexels-photo-5480696.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
       title: "LIGHT JACKETS",
+      cat:"jeans"
     },
   ];
 
@@ -47,7 +50,7 @@ export const sliderItems = [
     },
     {
       id:2,
-      img:"https://cdn.shopify.com/s/files/1/0101/4832/products/Angela_Natural_Tee.png?v=1606780388",
+      img:"https://www.pngarts.com/files/1/Summer-Clothes-For-Women-PNG-High-Quality-Image.png",
     },
     {
       id:3,
@@ -55,7 +58,7 @@ export const sliderItems = [
     },
     {
       id:4,
-      img:"https://www.burdastyle.com/pub/media/catalog/product/cache/7bd3727382ce0a860b68816435d76e26/107/BUS-PAT-BURTE-1320516/1170x1470_BS_2016_05_132_front.png",
+      img:"https://www.pngarts.com/files/1/Summer-Clothes-For-Women-PNG-Image-Background.png",
     },
     {
       id:5,
@@ -67,7 +70,7 @@ export const sliderItems = [
     },
     {
       id:7,
-      img:"https://www.vintageindustries.nl/download_front/qympzk1762/2217_Arrow_Jacket_Forest.png",
+      img:"https://www.pngarts.com/files/1/Women-Leather-Jacket-PNG-Pic.png",
     },
     {
       id:8,

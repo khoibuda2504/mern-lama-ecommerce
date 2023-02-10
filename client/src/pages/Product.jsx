@@ -1,17 +1,22 @@
 import { Add, Remove } from "@material-ui/icons";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import Newsletter from "../components/Newsletter";
+import { apiUrl } from "../constant";
+import { addProduct } from "../redux/cartRedux";
 import { mobile } from "../responsive";
-
+import { useDispatch } from "react-redux";
 const Container = styled.div``;
 
 const Wrapper = styled.div`
   padding: 50px;
   display: flex;
-  ${mobile({ padding: "10px", flexDirection:"column" })}
+  ${mobile({ padding: "10px", flexDirection: "column" })}
 `;
 
 const ImgContainer = styled.div`
@@ -69,6 +74,9 @@ const FilterColor = styled.div`
   background-color: ${(props) => props.color};
   margin: 0px 5px;
   cursor: pointer;
+  &.selected {
+    border: 1px solid ${({ color }) => color === 'black' ? 'red' : 'black'}
+  }
 `;
 
 const FilterSize = styled.select`
@@ -116,49 +124,66 @@ const Button = styled.button`
 `;
 
 const Product = () => {
+  const { id } = useParams()
+  const [product, setProduct] = useState({})
+  const [quantity, setQuantity] = useState(1)
+  const [color, setColor] = useState('')
+  const [size, setSize] = useState('')
+  const dispatch = useDispatch()
+  useEffect(() => {
+    if (!id) return
+    const getProduct = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/products/find/${id}`)
+        setProduct(response.data)
+      } catch (err) { }
+    }
+    getProduct()
+  }, [id])
+  const handleQuantity = type => {
+    if (type === 'minus') {
+      quantity > 1 && setQuantity(prev => prev - 1)
+    } else {
+      setQuantity(prev => prev + 1)
+    }
+  }
+  const handleClick = () => {
+    dispatch(addProduct({ product, quantity, price: product.price * quantity }))
+  }
+  const { title, desc, img, price } = product
   return (
     <Container>
       <Navbar />
       <Announcement />
       <Wrapper>
         <ImgContainer>
-          <Image src="https://i.ibb.co/S6qMxwr/jean.jpg" />
+          <Image src={img} />
         </ImgContainer>
         <InfoContainer>
-          <Title>Denim Jumpsuit</Title>
+          <Title>{title}</Title>
           <Desc>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-            venenatis, dolor in finibus malesuada, lectus ipsum porta nunc, at
-            iaculis arcu nisi sed mauris. Nulla fermentum vestibulum ex, eget
-            tristique tortor pretium ut. Curabitur elit justo, consequat id
-            condimentum ac, volutpat ornare.
+            {desc}
           </Desc>
-          <Price>$ 20</Price>
+          <Price>$ {price}</Price>
           <FilterContainer>
             <Filter>
               <FilterTitle>Color</FilterTitle>
-              <FilterColor color="black" />
-              <FilterColor color="darkblue" />
-              <FilterColor color="gray" />
+              {product?.color?.map(it => <FilterColor className={it === color ? 'selected' : ''} key={it} color={it} onClick={() => setColor(it)} />)}
             </Filter>
             <Filter>
               <FilterTitle>Size</FilterTitle>
-              <FilterSize>
-                <FilterSizeOption>XS</FilterSizeOption>
-                <FilterSizeOption>S</FilterSizeOption>
-                <FilterSizeOption>M</FilterSizeOption>
-                <FilterSizeOption>L</FilterSizeOption>
-                <FilterSizeOption>XL</FilterSizeOption>
+              <FilterSize onChange={(e) => setSize(e.target.value)}>
+                {(product?.size ?? []).map(it => <FilterSizeOption key={it}>{it}</FilterSizeOption>)}
               </FilterSize>
             </Filter>
           </FilterContainer>
           <AddContainer>
             <AmountContainer>
-              <Remove />
-              <Amount>1</Amount>
-              <Add />
+              <Remove onClick={() => handleQuantity('minus')} />
+              <Amount>{quantity}</Amount>
+              <Add onClick={() => handleQuantity('add')} />
             </AmountContainer>
-            <Button>ADD TO CART</Button>
+            <Button onClick={handleClick}>ADD TO CART</Button>
           </AddContainer>
         </InfoContainer>
       </Wrapper>
